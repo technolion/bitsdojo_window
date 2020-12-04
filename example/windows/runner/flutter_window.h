@@ -10,7 +10,7 @@
 #include "win32_window.h"
 
 // A window that does nothing but host a Flutter view.
-class FlutterWindow : public Win32Window {
+class FlutterWindow : public Win32Window, public IDropTarget {
  public:
   // Creates a new FlutterWindow driven by the |run_loop|, hosting a
   // Flutter view running |project|.
@@ -24,6 +24,17 @@ class FlutterWindow : public Win32Window {
   void OnDestroy() override;
   LRESULT MessageHandler(HWND window, UINT const message, WPARAM const wparam,
                          LPARAM const lparam) noexcept override;
+
+  // IUnknown implementation
+  HRESULT __stdcall QueryInterface (REFIID iid, void ** ppvObject);
+  ULONG __stdcall AddRef (void);
+  ULONG __stdcall Release (void);
+
+  // IDropTarget implementation
+  HRESULT __stdcall DragEnter(IDataObject * pDataObject, DWORD grfKeyState, POINTL pt, DWORD * pdwEffect);
+  HRESULT __stdcall DragOver(DWORD grfKeyState, POINTL pt, DWORD * pdwEffect);
+  HRESULT __stdcall DragLeave(void);
+  HRESULT __stdcall Drop(IDataObject * pDataObject, DWORD grfKeyState, POINTL pt, DWORD * pdwEffect);
 
  private:
   // The run loop driving events for this window.

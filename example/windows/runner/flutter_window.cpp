@@ -28,6 +28,9 @@ bool FlutterWindow::OnCreate() {
   RegisterPlugins(flutter_controller_->engine());
   run_loop_->RegisterFlutterInstance(flutter_controller_->engine());
   SetChildContent(flutter_controller_->view()->GetNativeWindow());
+
+  OleInitialize(nullptr);
+  RegisterDragDrop(flutter_controller_->view()->GetNativeWindow(), this);
   return true;
 }
 
@@ -61,4 +64,44 @@ FlutterWindow::MessageHandler(HWND hwnd, UINT const message,
   }
 
   return Win32Window::MessageHandler(hwnd, message, wparam, lparam);
+}
+
+HRESULT STDMETHODCALLTYPE
+FlutterWindow::QueryInterface(REFIID riid, _COM_Outptr_ void **ppvObject) {
+
+  return S_OK;
+}
+
+ULONG STDMETHODCALLTYPE FlutterWindow::AddRef() {
+  return 0;
+}
+
+ULONG STDMETHODCALLTYPE FlutterWindow::Release() {
+  return 0;
+}
+
+
+HRESULT __stdcall FlutterWindow::DragEnter(IDataObject *pDataObject, DWORD grfKeyState, 
+                                              POINTL pt, DWORD *pdwEffect)
+{
+  // TODO: Implement
+  return S_OK;
+}
+
+HRESULT __stdcall FlutterWindow::DragOver(DWORD grfKeyState, POINTL pt, DWORD * pdwEffect)
+{
+  // TODO: Implement
+  return S_OK;
+}
+
+HRESULT __stdcall FlutterWindow::DragLeave(void)
+{
+  // TODO: Implement
+  return S_OK;
+}
+
+HRESULT __stdcall FlutterWindow::Drop(IDataObject *pDataObject, DWORD grfKeyState, POINTL pt, DWORD *pdwEffect)
+{
+  // TODO: Implement
+  return S_OK;
 }
